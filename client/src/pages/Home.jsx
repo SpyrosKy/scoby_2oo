@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
+import ReactMapboxGl from "react-mapbox-gl";
 
 const Map = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
@@ -12,6 +12,7 @@ class Home extends Component {
       lng: 2.3488,
       lat: 48.8534,
       zoom: 11.39,
+      
     };
   }
 
@@ -24,7 +25,9 @@ class Home extends Component {
           containerStyle={{
             height: "100vh",
             width: "100vw",
+
           }}
+          center={[this.state.lng, this.state.lat]}
         >
           {/* <Layer
             type="symbol"
