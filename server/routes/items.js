@@ -21,7 +21,7 @@ router.get("/", function (req, res, next) {
 router.get("/:id", function (req, res, next) {
   ItemModel.findById(req.params.id)
     .then((item) => {
-      console.log("Liste of :", item);
+      console.log("1 item found :", item);
       res.status(200).json(item);
     })
     .catch((err) => {
@@ -30,7 +30,9 @@ router.get("/:id", function (req, res, next) {
 });
 
 router.post("/", (req, res, next) => {
-  ItemModel.create(req.body)
+var item = {...req.body, id_user : req.session.currentUser._id}
+
+  ItemModel.create(item)
     .then((newItem) => {
       console.log("new item succes");
       res.status(201).json(newItem);
