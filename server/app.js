@@ -9,6 +9,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const mongoose = require("mongoose");
 const app = express();
+const cors = require("cors");
 
 /*
  * Middlewares
@@ -29,6 +30,14 @@ app.use(
   })
 );
 
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    credentials: true,
+  })
+);
+
 /*
  * Routes
  */
@@ -36,9 +45,11 @@ app.use(
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const authRouter = require("./routes/auth");
+const itemsRouter = require("./routes/items");
 
 app.use("/", indexRouter);
 app.use("/api/auth", authRouter);
-app.use("/api/users", usersRouter);
+app.use("/api/items", itemsRouter);
+app.use("/api/user", usersRouter);
 
 module.exports = app;
