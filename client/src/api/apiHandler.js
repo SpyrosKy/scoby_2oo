@@ -81,7 +81,7 @@ export default {
   patchUser(objectUser) {
     return service
       .patch("/api/user/me",objectUser)
-      .then((res) => console.log("updated user front-end"))
+      .then((res) => console.log("updated user front-end", res))
     .catch(errorHandler)
 }
 

@@ -3,7 +3,30 @@ import { Link } from "react-router-dom";
 import { withUser } from "../components/Auth/withUser";
 import "../styles/Profile.css";
 import "../styles/CardItem.css";
+import apiHandler from '../api/apiHandler.js'
+
+
 class Profile extends Component {
+
+state = { phoneNumber : ""}
+
+  handleNumber = (event) => {
+
+    let value = event.target.value;
+    console.log("phone number : ",value)
+    this.setState({ phoneNumber : value });
+  }
+  
+  handleSubmit = (event) => {
+    event.preventDefault()
+    console.log(this.state)
+    apiHandler
+      .patchUser(this.state)
+      .then((apiResJSON) => console.log(apiResJSON))
+    .catch((err) => console.error(err))
+  }
+
+
   render() {
     const { authContext } = this.props;
     const { user } = authContext;
@@ -50,12 +73,13 @@ class Profile extends Component {
                 <input
                   className="input"
                   id="phoneNumber"
-                  type="tel"
+                  type="text"
                   name="phoneNumber"
                   placeholder="Add phone number"
+                  onChange={this.handleNumber}
                 />
               </div>
-              <button className="form__button">Add phone number</button>
+              <button className="form__button" onClick={this.handleSubmit} >Add phone number</button>
             </form>
           </div>
 

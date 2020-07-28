@@ -35,7 +35,7 @@ router.post("/", fileUpload.single("image"), (req, res, next) => {
 router.get("/", function (req, res, next) {
   ItemModel.find()
     .then((items) => {
-      console.log("Liste of :", items);
+      //console.log("Liste of :", items);
       res.status(200).json(items);
     })
     .catch((err) => {
