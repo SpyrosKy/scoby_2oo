@@ -1,18 +1,56 @@
 import React, { Component } from "react";
 import LocationAutoComplete from "../LocationAutoComplete";
 import "../../styles/form.css";
+import apiHandler from "../../api/apiHandler.js";
 
 class ItemForm extends Component {
-  state = {};
 
-  handleChange(event) {
-    console.log("Wax On Wax Off");
-    this.setState({});
-  }
+  state = {
+    name: '',
+    
+}
+
+  handleChange = (event) => {
+    let key = event.target.name;
+    let value;
+    // if (event.target.type === 'radio') {
+    //   value = event.target.value === 'yes' ? true : false;
+    //   console.log("value is", value)
+    // } else {
+      value = event.target.value;
+    // }
+    this.setState({ [key]: value });
+  };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Wax On Wax Off");
+        // for(let key in this.state){
+    //   fd.append(key,this.state[key])
+    // }
+    var objectFormData = new FormData();
+    objectFormData.append("name", this.state.name);
+    objectFormData.append("description", this.state.description);
+    objectFormData.append("image", this.state.image);
+    objectFormData.append("category", this.state.category);
+    objectFormData.append("quantity", this.state.quantity);
+    objectFormData.append("address", this.state.address);
+    objectFormData.append("location", this.state.location);
+
+    
+    objectFormData.append("createdAt", Date.now());
+
+    console.log(objectFormData);
+
+    apiHandler
+      .createItem(objectFormData)
+      .then((apiRes) => {
+        console.log("creation success", apiRes.data)
+        this.setState({ success: true });
+        // this.props.history.push("/plants");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     // In order to send back the data to the client, since there is an input type file you have to send the
     // data as formdata.
@@ -23,16 +61,27 @@ class ItemForm extends Component {
   };
 
   handlePlace = (place) => {
-    // This handle is passed as a callback to the autocomplete component.
-    // Take a look at the data and see what you can get from it.
-    // Look at the item model to know what you should retrieve and set as state.
-    console.log(place);
+    var locationObject = {
+      type: place.geometry.type,
+      coordinates: place.geometry.coordinates,
+      formattedAddress: place.place_name,
+    };
+
+    console.log("in form place : ", locationObject);
+    this.setState({ location: locationObject });
   };
+  // This handle is passed as a callback to the autocomplete component.
+  // Take a look at the data and see what you can get from it.
+  // Look at the item model to know what you should retrieve and set as state.
 
   render() {
     return (
       <div className="ItemForm-container">
-        <form className="form" onChange={this.handleChange}>
+        <form
+          className="form"
+          onChange={this.handleChange}
+          onSubmit={this.handleSubmit}
+        >
           <h2 className="title">Add Item</h2>
 
           <div className="form-group">
@@ -41,9 +90,11 @@ class ItemForm extends Component {
             </label>
             <input
               id="name"
+              name="name"
               className="input"
               type="text"
               placeholder="What are you giving away ?"
+              defaultValue={this.state.name}
             />
           </div>
 
@@ -52,7 +103,7 @@ class ItemForm extends Component {
               Category
             </label>
 
-            <select id="category" defaultValue="-1">
+            <select id="category" name="category"  defaultValue="-1">
               <option value="-1" disabled>
                 Select a category
               </option>
@@ -67,7 +118,12 @@ class ItemForm extends Component {
             <label className="label" htmlFor="quantity">
               Quantity
             </label>
-            <input className="input" id="quantity" type="number" />
+            <input
+              className="input"
+              name="quantity"
+              id="quantity"
+              type="number"
+            />
           </div>
 
           <div className="form-group">
@@ -83,6 +139,7 @@ class ItemForm extends Component {
             </label>
             <textarea
               id="description"
+              name="description"
               className="text-area"
               placeholder="Tell us something about this item"
             ></textarea>
@@ -102,10 +159,10 @@ class ItemForm extends Component {
               How do you want to be reached?
             </label>
             <div>
-              <input type="radio" />
+              <input name="contact" value="email" type="radio" />
               user email
             </div>
-            <input type="radio" />
+            <input name="contact" value="phone" type="radio" />
             contact phone number
           </div>
 

@@ -8,7 +8,7 @@ const session = require("express-session");
 // });
 router.patch("/me", (req, res, next) => {
   UserModel
-    .findByIdAndUpdate(session.currentUser.id, req.body)
+    .findByIdAndUpdate(session.currentUser._id, req.body)
     .then((updateUser) => {
     res.status(200).json(updateUser)
     })

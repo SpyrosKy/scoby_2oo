@@ -50,7 +50,7 @@ class Profile extends Component {
                 <input
                   className="input"
                   id="phoneNumber"
-                  type="text"
+                  type="tel"
                   name="phoneNumber"
                   placeholder="Add phone number"
                 />
