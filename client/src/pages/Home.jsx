@@ -15,6 +15,7 @@ class Home extends Component {
       lng: 2.3488,
       lat: 48.8534,
       zoom: 11.39,
+      toto: null,
     };
   }
 
@@ -28,11 +29,16 @@ class Home extends Component {
       .catch((err) => console.error(err));
   }
 
+  handleOnClick = (item) => {
+    this.setState({ toto: {} });
+  };
+
   // Implement react map box here.
   render() {
     if (this.state.items) {
       return (
         <div>
+          {this.state.toto && <div>Salut je suis totot</div>}
           <Map
             style="mapbox://styles/chaspy/ckd4iqh92130d1in2h73n7u0v"
             containerStyle={{
@@ -44,7 +50,7 @@ class Home extends Component {
             <Layer
               type="symbol"
               id="marker"
-              layout={{ "icon-image": "marker-15" }}
+              layout={{ "icon-image": "marker-15", "icon-size": 4 }}
             >
               {this.state.items.map((item) => {
                 console.log(
@@ -53,6 +59,7 @@ class Home extends Component {
                 );
                 return (
                   <Feature
+                    onClick={() => this.handleOnClick(item)}
                     key={item._id}
                     coordinates={[
                       item.location.coordinates[0],
