@@ -13,12 +13,11 @@ class ItemForm extends Component {
   handleChange = (event) => {
     let key = event.target.name;
     let value;
-    // if (event.target.type === 'radio') {
-    //   value = event.target.value === 'yes' ? true : false;
-    //   console.log("value is", value)
-    // } else {
+    if (event.target.type === 'file') {
+       value = event.target.files[0]
+     } else {
       value = event.target.value;
-    // }
+    }
     this.setState({ [key]: value });
   };
 
@@ -51,7 +50,7 @@ class ItemForm extends Component {
     apiHandler
       .createItem(objectFormData)
       .then((apiRes) => {
-        console.log("creation success", apiRes.data)
+        console.log("creation success", apiRes)
         this.setState({ success: true });
 
       })

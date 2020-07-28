@@ -1,11 +1,36 @@
 const express = require("express");
 const router = express.Router();
 const ItemModel = require("../models/Item");
-const fileUpload = require('../config/cloudinary');
+const fileUpload = require("../config/cloudinary");
 
 // router.get("/", function (req, res, next) {
 //   res.send("respond with a resource");
 // });
+
+router.post("/", fileUpload.single("image"), (req, res, next) => {
+  //console.log("in backend for item creation ", req.body);
+  var item;
+
+  if (req.file) {
+    item = { ...req.body };
+    item.image = req.file.path;
+    item.id_user = req.session.currentUser._id;
+  } else if (!req.file) {
+    item = { ...req.body };
+    item.id_user = req.session.currentUser._id;
+  }
+
+  console.log("in backend - new item to create ", item);
+
+  ItemModel.create(item)
+    .then((newItem) => {
+      console.log("new item success -> ", newItem);
+      res.status(201).json(newItem);
+    })
+    .catch((err) => {
+      res.sendStatus(500);
+    });
+});
 
 router.get("/", function (req, res, next) {
   ItemModel.find()
@@ -24,23 +49,6 @@ router.get("/:id", function (req, res, next) {
     .then((item) => {
       console.log("1 item found :", item);
       res.status(200).json(item);
-    })
-    .catch((err) => {
-      res.sendStatus(500);
-    });
-});
-
-router.post("/", fileUpload.single("image"), (req, res, next) => {
-  var item = {
-    ...req.body,
-    image: req.file.path,
-    id_user: req.session.currentUser._id,
-  };
-
-  ItemModel.create(item)
-    .then((newItem) => {
-      console.log("new item success");
-      res.status(201).json(newItem);
     })
     .catch((err) => {
       res.sendStatus(500);
