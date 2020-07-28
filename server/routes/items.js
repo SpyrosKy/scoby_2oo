@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const ItemModel = require("../models/Item");
+const fileUpload = require('../config/cloudinary');
 
 // router.get("/", function (req, res, next) {
 //   res.send("respond with a resource");

@@ -24,29 +24,36 @@ class ItemForm extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-        // for(let key in this.state){
-    //   fd.append(key,this.state[key])
-    // }
-    var objectFormData = new FormData();
-    objectFormData.append("name", this.state.name);
-    objectFormData.append("description", this.state.description);
-    objectFormData.append("image", this.state.image);
-    objectFormData.append("category", this.state.category);
-    objectFormData.append("quantity", this.state.quantity);
-    objectFormData.append("address", this.state.address);
-    objectFormData.append("location", this.state.location);
 
+    function buildFormData(formData, data, parentKey) {
+      if (data && typeof data === 'object' && !(data instanceof Date) && !(data instanceof File)) {
+        Object.keys(data).forEach(key => {
+          buildFormData(formData, data[key], parentKey ? `${parentKey}[${key}]` : key);
+        });
+      } else {
+        const value = data == null ? '' : data;
     
-    objectFormData.append("createdAt", Date.now());
-
-    console.log(objectFormData);
+        formData.append(parentKey, value);
+      }
+    }
+    
+    function jsonToFormData(data) {
+      const formData = new FormData();
+    
+      buildFormData(formData, data);
+    
+      return formData;
+    }
+    
+    
+   var objectFormData = jsonToFormData(this.state)
 
     apiHandler
       .createItem(objectFormData)
       .then((apiRes) => {
         console.log("creation success", apiRes.data)
         this.setState({ success: true });
-        // this.props.history.push("/plants");
+
       })
       .catch((error) => {
         console.log(error);
