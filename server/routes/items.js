@@ -29,12 +29,16 @@ router.get("/:id", function (req, res, next) {
     });
 });
 
-router.post("/", (req, res, next) => {
-var item = {...req.body, id_user : req.session.currentUser._id}
+router.post("/", fileUpload.single("image"), (req, res, next) => {
+  var item = {
+    ...req.body,
+    image: req.file.path,
+    id_user: req.session.currentUser._id,
+  };
 
   ItemModel.create(item)
     .then((newItem) => {
-      console.log("new item succes");
+      console.log("new item success");
       res.status(201).json(newItem);
     })
     .catch((err) => {

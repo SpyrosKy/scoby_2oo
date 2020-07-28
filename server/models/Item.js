@@ -31,11 +31,9 @@ const itemSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  contact : String,
 
-  timestamps: {
-    createdAt: Date,
-    updatedAt: Date,
-  },
+  timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
 });
 
 const Item = mongoose.model("Item", itemSchema);

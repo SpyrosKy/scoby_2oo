@@ -92,7 +92,7 @@ class ItemForm extends Component {
             <label className="custom-upload label" htmlFor="image">
               Upload image
             </label>
-            <input className="input" id="image" type="file" />
+            <input className="input" name="image" id="image" type="file" />
           </div>
 
           <h2>Contact information</h2>
