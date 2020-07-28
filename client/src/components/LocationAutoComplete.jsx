@@ -60,6 +60,8 @@ class LocationAutoComplete extends Component {
       search: place.place_name,
       results: [],
     });
+    console.log("in locationautocomplete", place)
+    console.log("in locationautocomplete - place name", place.place_name)
 
     this.props.onSelect(place);
   }
